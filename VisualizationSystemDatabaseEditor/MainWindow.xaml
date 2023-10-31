@@ -1,0 +1,364 @@
+﻿<Window x:Class="VisualizationSystemDatabaseEditor.MainWindow"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        TextElement.FontWeight="Regular"
+        TextElement.FontSize="13"
+        TextOptions.TextFormattingMode="Ideal"
+        TextOptions.TextRenderingMode="Auto"
+        Background="{DynamicResource MaterialDesignPaper}"
+        FontFamily="{DynamicResource MaterialDesignFont}"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        mc:Ignorable="d"
+        Title="Редактор базы данных системы визуализации" Height="768" Width="1360"
+        Closed="MainWindow_OnClosed" WindowState="Maximized"
+        Loaded="MainWindow_OnLoaded">
+    <Window.Resources>
+        <Style TargetType="Button">
+            <Setter Property="Focusable" Value="False"></Setter>
+        </Style>
+        <Style TargetType="materialDesign:PackIcon">
+            <Setter Property="VerticalAlignment" Value="Center"></Setter>
+            <Setter Property="HorizontalAlignment" Value="Center"></Setter>
+        </Style>
+    </Window.Resources>
+    <Grid>
+        <TabControl x:Name="MainTabControl" Grid.Row="0">
+            <TabItem>
+                <TabItem.Header>
+                    <TextBlock Text="Пользователи"/>
+                </TabItem.Header>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"></RowDefinition>
+                        <RowDefinition Height="60"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <DataGrid Grid.Row="0" x:Name="UsersDataGrid" AutoGenerateColumns="False"
+                              IsReadOnly="True">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="ID" Binding="{Binding Id}"></DataGridTextColumn>
+                        <DataGridTextColumn Header="Имя" Binding="{Binding Name}"></DataGridTextColumn>
+                        <DataGridTextColumn Header="Email" Binding="{Binding Email}"></DataGridTextColumn>
+                        <DataGridTextColumn Header="Номер телефона" Binding="{Binding PhoneNumber}"></DataGridTextColumn>
+                        <DataGridTextColumn Header="Пароль" Binding="{Binding Password}"></DataGridTextColumn>
+                        <DataGridTextColumn Header="Роль" Binding="{Binding Role.Name}"></DataGridTextColumn>
+                        <DataGridTemplateColumn Header="Редактировать" CanUserResize="False" CanUserSort="False">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button
+                                        IsEnabled="{Binding DataContext.ControlsEnabled,
+                                        RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
+                                        Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton}"
+                                        HorizontalAlignment="Center" VerticalAlignment="Center" Width="20" Height="20"
+                                        Click="OpenEditWindow">
+                                        <materialDesign:PackIcon Kind="Pencil"/>
+                                    </Button>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Header="Удалить" CanUserResize="False" CanUserSort="False">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button
+                                        IsEnabled="{Binding DataContext.ControlsEnabled,
+                                        RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
+                                        Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton}"
+                                        HorizontalAlignment="Center" VerticalAlignment="Center" Width="20" Height="20"
+                                        Click="DeleteButton_OnClick">
+                                        <materialDesign:PackIcon Kind="Delete"/>
+                                    </Button>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                    </DataGrid>
+                    <StackPanel Grid.Row="1" Orientation="Horizontal" VerticalAlignment="Bottom">
+                        <TextBox x:Name="NameFilterUserTextBox" Margin="10"
+                                 materialDesign:HintAssist.Hint="Имя"
+                                 Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                 Width="200"/>
+                        <TextBox x:Name="EmailFilterUserTextBox" Margin="10"
+                                 materialDesign:HintAssist.Hint="Email"
+                                 Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                 Width="200"/>
+                        <TextBox x:Name="PhoneNumberFilterUserTextBox" Margin="10"
+                                 materialDesign:HintAssist.Hint="Номер телефона"
+                                 Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                 Width="200"/>
+                        <ComboBox x:Name="RoleFilterUserComboBox" Margin="10,10,0,0" Width="200"
+                                  materialDesign:HintAssist.Hint="Роль" DisplayMemberPath="Name"/>
+                    </StackPanel>
+                    <Button Grid.Row="1" IsEnabled="{Binding DataContext.ControlsEnabled,
+                                RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
+                            Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton}"
+                            Margin="0,0,110,0" VerticalAlignment="Center" HorizontalAlignment="Right"
+                            Click="SearchButton_OnClick" Focusable="False">
+                        <materialDesign:PackIcon Kind="DatabaseSearch" />
+                    </Button>
+                    <Button Grid.Row="1" IsEnabled="{Binding DataContext.ControlsEnabled,
+                                RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
+                            Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton}"
+                            Margin="0,0,60,0" VerticalAlignment="Center" HorizontalAlignment="Right"
+                            Click="ResetFilterButton_OnClick">
+                        <materialDesign:PackIcon Kind="Autorenew"/>
+                    </Button>
+                    <Button Grid.Row="1" IsEnabled="{Binding DataContext.ControlsEnabled,
+                                RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
+                            Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton}"
+                            Margin="0,0,10,0" Click="AddDataButton_OnClick"
+                            VerticalAlignment="Center" HorizontalAlignment="Right">
+                        <materialDesign:PackIcon Kind="Plus"/>
+                    </Button>
+                </Grid>
+            </TabItem>
+            <TabItem>
+                <TabItem.Header>
+                    <TextBlock Text="Визуализации"/>
+                </TabItem.Header>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"></RowDefinition>
+                        <RowDefinition Height="60"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <DataGrid Grid.Row="0" x:Name="VisualizationsDataGrid" AutoGenerateColumns="False"
+                              IsReadOnly="True">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="ID" Binding="{Binding Id}"></DataGridTextColumn>
+                        <DataGridTextColumn Header="Название" Binding="{Binding Name}"></DataGridTextColumn>
+                        <DataGridTextColumn Header="Тип" Binding="{Binding Type.Name}"></DataGridTextColumn>
+                        <DataGridTextColumn Header="Аналитик" Binding="{Binding Analyst.Name}"></DataGridTextColumn>
+                        <DataGridTextColumn Header="Источник данных" Binding="{Binding DataSource.Name}"></DataGridTextColumn>
+                        <DataGridTextColumn Header="Параметры" Binding="{Binding Parameters}"></DataGridTextColumn>
+                        <DataGridTextColumn Header="Настройки визуализации" Binding="{Binding VisualizationSettings}"></DataGridTextColumn>
+                        <DataGridTemplateColumn  Header="Редактировать" CanUserResize="False" CanUserSort="False">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button
+                                        IsEnabled="{Binding DataContext.ControlsEnabled,
+                                        RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
+                                        Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton}"
+                                        HorizontalAlignment="Center" VerticalAlignment="Center" Width="20" Height="20"
+                                        Click="OpenEditWindow">
+                                        <materialDesign:PackIcon Kind="Pencil"/>
+                                    </Button>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Header="Удалить" CanUserResize="False" CanUserSort="False">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button
+                                        IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
+                                        Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton}"
+                                        HorizontalAlignment="Center" VerticalAlignment="Center" Width="20" Height="20"
+                                        Click="DeleteButton_OnClick">
+                                        <materialDesign:PackIcon Kind="Delete"/>
+                                    </Button>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                    </DataGrid>
+                    <StackPanel Grid.Row="1" Orientation="Horizontal" VerticalAlignment="Bottom">
+                        <TextBox x:Name="NameFilterVisualizationTextBox" Margin="10"
+                                 materialDesign:HintAssist.Hint="Название"
+                                 Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                 Width="200"/>
+                        <TextBox x:Name="TypeFilterVisualizationTextBox" Margin="10"
+                                 materialDesign:HintAssist.Hint="Тип"
+                                 Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                 Width="200"/>
+                        <TextBox x:Name="AnalystFilterVisualizationTextBox" Margin="10"
+                                 materialDesign:HintAssist.Hint="Аналитик"
+                                 Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                 Width="200"/>
+                        <TextBox x:Name="DataSourceFilterVisualizationTextBox" Margin="10"
+                                 materialDesign:HintAssist.Hint="Источник данных"
+                                 Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                 Width="200"/>
+                    </StackPanel>
+                    <Button Grid.Row="1" IsEnabled="{Binding DataContext.ControlsEnabled,
+                                RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
+                            Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton}"
+                            Margin="0,0,110,0" VerticalAlignment="Center" HorizontalAlignment="Right"
+                            Click="SearchButton_OnClick">
+                        <materialDesign:PackIcon Kind="DatabaseSearch" />
+                    </Button>
+                    <Button Grid.Row="1" IsEnabled="{Binding DataContext.ControlsEnabled,
+                                RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
+                            Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton}"
+                            Margin="0,0,60,0" VerticalAlignment="Center" HorizontalAlignment="Right"
+                            Click="ResetFilterButton_OnClick">
+                        <materialDesign:PackIcon Kind="Autorenew"/>
+                    </Button>
+                    <Button Grid.Row="1"
+                            IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
+                        Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton}"
+                        HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,10,10"
+                        Click="AddDataButton_OnClick">
+                        <materialDesign:PackIcon Kind="Plus"/>
+                    </Button>
+                </Grid>
+            </TabItem>
+            <TabItem>
+                <TabItem.Header>
+                    <TextBlock Text="Дашборды"/>
+                </TabItem.Header>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"></RowDefinition>
+                        <RowDefinition Height="60"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <DataGrid Grid.Row="0" x:Name="DashboardsDataGrid" AutoGenerateColumns="False" IsReadOnly="True">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="ID" Binding="{Binding Id}"></DataGridTextColumn>
+                        <DataGridTextColumn Header="Название" Binding="{Binding Name}"></DataGridTextColumn>
+                        <DataGridTextColumn Header="Аналитик" Binding="{Binding Analyst.Name}"></DataGridTextColumn>
+                        <DataGridTemplateColumn Header="Редактировать" CanUserResize="False" CanUserSort="False">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button
+                                        IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
+                                        Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton}"
+                                        HorizontalAlignment="Center" VerticalAlignment="Center" Width="20" Height="20"
+                                        Click="OpenEditWindow">
+                                        <materialDesign:PackIcon Kind="Pencil"/>
+                                    </Button>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn  Header="Удалить" CanUserResize="False" CanUserSort="False">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button
+                                        IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
+                                        Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton}"
+                                        HorizontalAlignment="Center" VerticalAlignment="Center" Width="20" Height="20"
+                                        Click="DeleteButton_OnClick">
+                                        <materialDesign:PackIcon Kind="Delete"/>
+                                    </Button>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                    </DataGrid>
+                    <StackPanel Grid.Row="1" Orientation="Horizontal" VerticalAlignment="Bottom">
+                        <TextBox x:Name="NameFilterDashboardTextBox" Margin="10"
+                                 materialDesign:HintAssist.Hint="Название"
+                                 Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                 Width="200"/>
+                        <TextBox x:Name="AnalystFilterDashboardTextBox" Margin="10"
+                                 materialDesign:HintAssist.Hint="Аналитик"
+                                 Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                 Width="200"/>
+                    </StackPanel>
+                    <Button Grid.Row="1" IsEnabled="{Binding DataContext.ControlsEnabled,
+                                RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
+                            Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton}"
+                            Margin="0,0,110,0" VerticalAlignment="Center" HorizontalAlignment="Right"
+                            Click="SearchButton_OnClick">
+                        <materialDesign:PackIcon Kind="DatabaseSearch" />
+                    </Button>
+                    <Button Grid.Row="1" IsEnabled="{Binding DataContext.ControlsEnabled,
+                                RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
+                            Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton}"
+                            Margin="0,0,60,0" VerticalAlignment="Center" HorizontalAlignment="Right"
+                            Click="ResetFilterButton_OnClick">
+                        <materialDesign:PackIcon Kind="Autorenew"/>
+                    </Button>
+                    <Button Grid.Row="1"
+                        IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
+                        Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton}"
+                        HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,10,10"
+                        Click="AddDataButton_OnClick">
+                        <materialDesign:PackIcon Kind="Plus"/>
+                    </Button>
+                </Grid>
+            </TabItem>
+            <TabItem>
+                <TabItem.Header>
+                    <TextBlock Text="Источники данных"/>
+                </TabItem.Header>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"></RowDefinition>
+                        <RowDefinition Height="60"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <DataGrid Grid.Row="0" x:Name="DataSourcesDataGrid" AutoGenerateColumns="False" IsReadOnly="True">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="ID" Binding="{Binding Id}"></DataGridTextColumn>
+                        <DataGridTextColumn Header="Название" Binding="{Binding Name}"></DataGridTextColumn>
+                        <DataGridTextColumn Header="Тип" Binding="{Binding Type.Name}"></DataGridTextColumn>
+                        <DataGridTextColumn Header="Расположение" Binding="{Binding Location}"></DataGridTextColumn>
+                        <DataGridTextColumn Header="Учетные данные безопасности" Binding="{Binding SecurityCredentials}"></DataGridTextColumn>
+                        <DataGridTextColumn Header="Частота использования" Binding="{Binding FrequencyOfUse}"></DataGridTextColumn>
+                        <DataGridTemplateColumn  Header="Редактировать" CanUserResize="False" CanUserSort="False">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button
+                                        IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
+                                        Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton}"
+                                        HorizontalAlignment="Center" VerticalAlignment="Center" Width="20" Height="20"
+                                        Click="OpenEditWindow">
+                                        <materialDesign:PackIcon Kind="Pencil"/>
+                                    </Button>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Header="Удалить" CanUserResize="False" CanUserSort="False">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button
+                                        IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
+                                        Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton}"
+                                        HorizontalAlignment="Center" VerticalAlignment="Center" Width="20" Height="20"
+                                        Click="DeleteButton_OnClick">
+                                        <materialDesign:PackIcon Kind="Delete"/>
+                                    </Button>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                    </DataGrid>
+                    <StackPanel Grid.Row="1" Orientation="Horizontal" VerticalAlignment="Bottom">
+                        <TextBox x:Name="NameFilterDataSourceTextBox" Margin="10"
+                                 materialDesign:HintAssist.Hint="Название"
+                                 Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                 Width="200"/>
+                        <TextBox x:Name="TypeFilterDataSourceTextBox" Margin="10"
+                                 materialDesign:HintAssist.Hint="Тип"
+                                 Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                 Width="200"/>
+                        <TextBox x:Name="LocationFilterDataSourceTextBox" Margin="10"
+                                 materialDesign:HintAssist.Hint="Расположение"
+                                 Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                 Width="200"/>
+                    </StackPanel>
+                    <Button Grid.Row="1" IsEnabled="{Binding DataContext.ControlsEnabled,
+                                RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
+                            Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton}"
+                            Margin="0,0,110,0" VerticalAlignment="Center" HorizontalAlignment="Right"
+                            Click="SearchButton_OnClick">
+                            <materialDesign:PackIcon Kind="DatabaseSearch" />
+                    </Button>
+                    <Button Grid.Row="1" IsEnabled="{Binding DataContext.ControlsEnabled,
+                                RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
+                            Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton}"
+                            Margin="0,0,60,0" VerticalAlignment="Center" HorizontalAlignment="Right"
+                            Click="ResetFilterButton_OnClick">
+                            <materialDesign:PackIcon Kind="Autorenew"/>
+                    </Button>
+                    <Button Grid.Row="1"
+                        IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
+                        Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton}"
+                        HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,10,10"
+                        Click="AddDataButton_OnClick">
+                        <materialDesign:PackIcon Kind="Plus"/>
+                    </Button>
+                </Grid>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</Window>

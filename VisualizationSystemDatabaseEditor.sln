@@ -1,0 +1,16 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VisualizationSystemDatabaseEditor", "VisualizationSystemDatabaseEditor\VisualizationSystemDatabaseEditor.csproj", "{BB64D7A0-1D51-40C4-B690-1198ED68AFAC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BB64D7A0-1D51-40C4-B690-1198ED68AFAC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BB64D7A0-1D51-40C4-B690-1198ED68AFAC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BB64D7A0-1D51-40C4-B690-1198ED68AFAC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BB64D7A0-1D51-40C4-B690-1198ED68AFAC}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

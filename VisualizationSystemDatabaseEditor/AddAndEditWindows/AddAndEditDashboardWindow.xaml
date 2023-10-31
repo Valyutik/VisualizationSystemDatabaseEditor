@@ -1,0 +1,45 @@
+﻿<Window x:Class="VisualizationSystemDatabaseEditor.AddAndEditWindows.AddAndEditDashboardWindow"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        TextElement.FontWeight="Regular"
+        TextElement.FontSize="13"
+        TextOptions.TextFormattingMode="Ideal"
+        TextOptions.TextRenderingMode="Auto"
+        Background="{DynamicResource MaterialDesignPaper}"
+        FontFamily="{DynamicResource MaterialDesignFont}"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        mc:Ignorable="d"
+        Title="Добавление дашборда" Height="Auto" Width="800"
+        Loaded="AddAndEditDashboardWindow_OnLoaded"
+        Closed="AddAndEditDashboardWindow_OnClosed">
+    <Grid>
+        <Border MinWidth="400" Margin="15" Background="White" VerticalAlignment="Center" Padding="30"
+                MaxWidth="550" CornerRadius="20">
+            <Border.Effect>
+                <DropShadowEffect BlurRadius="30" Color="Gray" ShadowDepth="0"/>
+            </Border.Effect>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                </Grid.RowDefinitions>
+                <StackPanel Grid.Row="0">
+                    <TextBlock x:Name="CaptionTextBlock" Text="Добавление дашборда" FontSize="30" FontWeight="Bold"
+                               Margin="0,0,0,20"/>
+                    <TextBox x:Name="NameTextBox" Margin="0,0,0,25"
+                             materialDesign:HintAssist.Hint="Введите название дашборда"
+                             Style="{StaticResource MaterialDesignFloatingHintTextBox}"/>
+                    <ComboBox x:Name="AnalystComboBox" Margin="0,0,0,15"
+                              materialDesign:HintAssist.Hint="Выберете аналитика" DisplayMemberPath="Name"/>
+                </StackPanel>
+                <Button x:Name="AddButton" Grid.Row="1" HorizontalAlignment="Right" Content="Добавить" IsDefault="True"
+                        Click="AddButton_OnClick"/>
+                <Button Grid.Row="1" HorizontalAlignment="Left" Content="Отмена"
+                        Click="ReturnPreviousWindow"/>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>
