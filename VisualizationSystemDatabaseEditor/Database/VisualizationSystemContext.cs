@@ -4,36 +4,32 @@ using VisualizationSystemDatabaseEditor.Database.Models;
 
 namespace VisualizationSystemDatabaseEditor.Database;
 
-public partial class VisualizationSystemContext : DbContext
+public sealed partial class VisualizationSystemContext : DbContext
 {
     public VisualizationSystemContext()
     {
+        Database.EnsureCreated();
     }
 
-    public VisualizationSystemContext(DbContextOptions<VisualizationSystemContext> options)
-        : base(options)
-    {
-    }
+    public DbSet<Dashboard> Dashboards { get; set; }
 
-    public virtual DbSet<Dashboard> Dashboards { get; set; }
+    public DbSet<DataSource> DataSources { get; set; }
 
-    public virtual DbSet<DataSource> DataSources { get; set; }
+    public DbSet<DataSourceType> DataSourceTypes { get; set; }
 
-    public virtual DbSet<DataSourceType> DataSourceTypes { get; set; }
+    public DbSet<Role> Roles { get; set; }
 
-    public virtual DbSet<Role> Roles { get; set; }
+    public DbSet<User> Users { get; set; }
 
-    public virtual DbSet<User> Users { get; set; }
+    public DbSet<Visualization> Visualizations { get; set; }
 
-    public virtual DbSet<Visualization> Visualizations { get; set; }
-
-    public virtual DbSet<VisualizationType> VisualizationTypes { get; set; }
+    public DbSet<VisualizationType> VisualizationTypes { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        const string connection = "";
+        const string connection = "Server=localhost;Database=VisualizationSystemDatabase;Trusted_Connection=True;TrustServerCertificate=True;";
         optionsBuilder.UseLazyLoadingProxies()
-            .UseMySql(connection, ServerVersion.AutoDetect(connection));
+            .UseSqlServer(connection);
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
