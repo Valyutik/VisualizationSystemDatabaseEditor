@@ -4,9 +4,9 @@
 Database editor, made within the framework of production practice in the discipline of "development, administration and protection of databases" on the topic "Visualization system"
 
 ## Screenshots
-* Authentication window
+* Authorization window
 
-![Authentication](https://i.ibb.co/0BQdgFt/image.png)
+![Authorization](https://i.ibb.co/0BQdgFt/image.png)
 * Main window
 
 ![Main](https://i.ibb.co/FXwmXpY/image.png)
